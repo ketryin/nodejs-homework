@@ -46,7 +46,7 @@ router.delete('/:contactId', async (req, res, next) => {
 router.patch('/:contactId', validationMiddleware(addOrUpdateSchema), async (req, res, next) => {
   const updatedContact = await updateContact(Number(req.params.contactId), req.body);
 
-  if (updateContact) {
+  if (updatedContact) {
     res.json(updatedContact);
     return;
   }
