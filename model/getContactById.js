@@ -1,8 +1,11 @@
-const listContacts = require("./listContacts");
+const contactsCollection = require('./contactsCollection')
 
 async function getContactById(contactId) {
-  const contacts = await listContacts();
-  return contacts.find((contact) => contact.id === contactId);
+  try {
+    return await contactsCollection.findById(contactId);
+  } catch (error) {
+    return null;
+  }
 }
 
 module.exports = getContactById;
