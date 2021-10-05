@@ -1,11 +1,11 @@
-const contactsCollection = require('./contactsCollection');
+const contactsCollection = require('./contactsCollection')
 
 async function listContacts() {
   try {
-    return await contactsCollection.find({});
+    return await contactsCollection.find({})
   } catch (error) {
-    return [];
+    return []
   }
 };
 
-module.exports = listContacts;
+module.exports = listContacts

@@ -2,17 +2,17 @@ const contactsCollection = require('./contactsCollection')
 
 async function removeContact(contactId) {
   try {
-    const contactToDelete = await contactsCollection.findById(req.params.contactId);
+    const contactToDelete = await contactsCollection.findById(contactId)
 
     if (!contactToDelete) {
-      return false;
+      return false
     }
-    
-    await contactsCollection.findByIdAndDelete(contactId);
-    return true;
+
+    await contactsCollection.findByIdAndDelete(contactId)
+    return true
   } catch (error) {
-    return false;
+    return false
   }
 }
 
-module.exports = removeContact;
+module.exports = removeContact

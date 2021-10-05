@@ -2,10 +2,10 @@ const contactsCollection = require('./contactsCollection')
 
 async function getContactById(contactId) {
   try {
-    return await contactsCollection.findById(contactId);
+    return await contactsCollection.findById(contactId)
   } catch (error) {
-    return null;
+    return null
   }
 }
 
-module.exports = getContactById;
+module.exports = getContactById
