@@ -4,7 +4,7 @@ async function getContactById(contactId, userId) {
   try {
     const contact = await contactsCollection.findById(contactId)
 
-    if (contact.owner !== userId) {
+    if (contact.owner._id.toString() !== userId) {
       return null
     }
 

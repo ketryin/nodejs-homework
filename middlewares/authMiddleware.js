@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { SECRET_KEY } = process.env
 
-const auth = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   if (!req.headers.authorization) {
     res.status(401).json({ message: 'Not authorized.' })
     return
@@ -12,7 +12,8 @@ const auth = (req, res, next) => {
     const user = jwt.decode(token, SECRET_KEY)
 
     if (!user) {
-      res.status(401).json({ messag: 'Token is invalid.' })
+      res.status(401).json({ message: 'Token is invalid.' })
+      return
     }
 
     req.userId = user._id
@@ -20,8 +21,8 @@ const auth = (req, res, next) => {
 
     next()
   } catch (error) {
-    res.status(401).json({ messag: 'Token is invalid.' })
+    res.status(401).json({ message: 'Token is invalid.' })
   }
 }
 
-module.exports = auth
+module.exports = authMiddleware

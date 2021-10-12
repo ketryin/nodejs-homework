@@ -32,7 +32,7 @@ router.post('/signup', validationMiddleware(userSchema), async (req, res, next) 
     return
   }
 
-  const createdUser = createUser(email, password)
+  const createdUser = await createUser(email, password)
 
   res.status(201).json({ email: createdUser.email, subscription: createdUser.subscription })
 })
@@ -68,7 +68,7 @@ router.post('/logout', authMiddleware, async (req, res, next) => {
 
   await deleteTokenFromUser(req.userId)
 
-  res.status(204)
+  res.status(204).json({})
 })
 
 router.patch('/', authMiddleware, validationMiddleware(subscriptionSchema), async (req, res, next) => {

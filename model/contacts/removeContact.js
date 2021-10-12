@@ -8,7 +8,7 @@ async function removeContact(contactId, userId) {
       return false
     }
 
-    if (contactToDelete.owner !== userId) {
+    if (contactToDelete.owner._id.toString() !== userId) {
       return false
     }
 

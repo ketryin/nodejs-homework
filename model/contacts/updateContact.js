@@ -8,7 +8,7 @@ async function updateContact(contactId, contactData, userId) {
       return null
     }
 
-    if (contactToUpdate.owner !== userId) {
+    if (contactToUpdate.owner._id.toString() !== userId) {
       return null
     }
 
