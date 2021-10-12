@@ -3,11 +3,11 @@ const router = express.Router()
 const validationMiddleware = require('../../middlewares/validationMiddleware')
 const { addOrUpdateSchema, updateFavoriteSchema } = require('../../validations/validationSchemas')
 
-const listContacts = require('../../model/listContacts')
-const getContactById = require('../../model/getContactById')
-const addContact = require('../../model/addContact')
-const removeContact = require('../../model/removeContact')
-const updateContact = require('../../model/updateContact')
+const listContacts = require('../../model/contacts/listContacts')
+const getContactById = require('../../model/contacts/getContactById')
+const addContact = require('../../model/contacts/addContact')
+const removeContact = require('../../model/contacts/removeContact')
+const updateContact = require('../../model/contacts/updateContact')
 
 const notFoundMessage = { message: 'Not found' }
 
