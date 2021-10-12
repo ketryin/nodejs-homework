@@ -21,6 +21,6 @@ const userShema = Schema({
   },
 }, { versionKey: false, timestamps: true })
 
-const usersCollection = model('user', userShema)
+const usersCollection = model('users', userShema)
 
 module.exports = usersCollection
