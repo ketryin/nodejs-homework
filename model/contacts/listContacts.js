@@ -1,8 +1,8 @@
 const contactsCollection = require('./contactsCollection')
 
-async function listContacts() {
+async function listContacts(userId) {
   try {
-    return await contactsCollection.find({})
+    return await contactsCollection.find({ owner: userId })
   } catch (error) {
     return []
   }

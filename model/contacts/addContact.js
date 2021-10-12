@@ -1,10 +1,11 @@
 const contactsCollection = require('./contactsCollection')
 
-async function addContact(data) {
+async function addContact(data, userId) {
   const newContact = {
     name: data.name,
     email: data.email,
     phone: data.phone,
+    owner: userId
   }
 
   try {

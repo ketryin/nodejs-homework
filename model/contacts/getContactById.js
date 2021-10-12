@@ -1,8 +1,14 @@
 const contactsCollection = require('./contactsCollection')
 
-async function getContactById(contactId) {
+async function getContactById(contactId, userId) {
   try {
-    return await contactsCollection.findById(contactId)
+    const contact = await contactsCollection.findById(contactId)
+
+    if (contact.owner !== userId) {
+      return null
+    }
+
+    return contact
   } catch (error) {
     return null
   }
