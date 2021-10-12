@@ -32,11 +32,11 @@ router.post('/', authMiddleware, validationMiddleware(addOrUpdateSchema), async 
   const newContact = await addContact(req.body, req.userId)
 
   if (!newContact) {
-    res.status(400).json({ message : 'Contact already exists.' })
+    res.status(400).json({ message: 'Contact already exists.' })
     return
   }
 
-  res.status(201).json({ name : newContact.name, email : newContact.email, phone : newContact.phone })
+  res.status(201).json({ name: newContact.name, email: newContact.email, phone: newContact.phone })
 })
 
 router.delete('/:contactId', authMiddleware, async (req, res, next) => {
