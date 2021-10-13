@@ -1,10 +1,14 @@
 const contactsCollection = require('./contactsCollection')
 
-async function updateContact(contactId, contactData) {
+async function updateContact(contactId, contactData, userId) {
   try {
     const contactToUpdate = await contactsCollection.findByIdAndUpdate(contactId, { $set: contactData })
 
     if (!contactToUpdate) {
+      return null
+    }
+
+    if (contactToUpdate.owner._id.toString() !== userId) {
       return null
     }
 

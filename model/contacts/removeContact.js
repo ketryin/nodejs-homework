@@ -1,10 +1,14 @@
 const contactsCollection = require('./contactsCollection')
 
-async function removeContact(contactId) {
+async function removeContact(contactId, userId) {
   try {
     const contactToDelete = await contactsCollection.findById(contactId)
 
     if (!contactToDelete) {
+      return false
+    }
+
+    if (contactToDelete.owner._id.toString() !== userId) {
       return false
     }
 

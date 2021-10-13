@@ -1,23 +1,24 @@
 const express = require('express')
 const router = express.Router()
 const validationMiddleware = require('../../middlewares/validationMiddleware')
+const authMiddleware = require('../../middlewares/authMiddleware')
 const { addOrUpdateSchema, updateFavoriteSchema } = require('../../validations/validationSchemas')
 
-const listContacts = require('../../model/listContacts')
-const getContactById = require('../../model/getContactById')
-const addContact = require('../../model/addContact')
-const removeContact = require('../../model/removeContact')
-const updateContact = require('../../model/updateContact')
+const listContacts = require('../../model/contacts/listContacts')
+const getContactById = require('../../model/contacts/getContactById')
+const addContact = require('../../model/contacts/addContact')
+const removeContact = require('../../model/contacts/removeContact')
+const updateContact = require('../../model/contacts/updateContact')
 
 const notFoundMessage = { message: 'Not found' }
 
-router.get('/', async (req, res, next) => {
-  const contactsList = await listContacts()
+router.get('/', authMiddleware, async (req, res, next) => {
+  const contactsList = await listContacts(req.userId)
   res.json(contactsList)
 })
 
-router.get('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId)
+router.get('/:contactId', authMiddleware, async (req, res, next) => {
+  const contact = await getContactById(req.params.contactId, req.userId)
 
   if (contact) {
     res.json(contact)
@@ -27,13 +28,19 @@ router.get('/:contactId', async (req, res, next) => {
   res.status(404).json(notFoundMessage)
 })
 
-router.post('/', validationMiddleware(addOrUpdateSchema), async (req, res, next) => {
-  const newContact = await addContact(req.body)
-  res.status(201).json(newContact)
+router.post('/', authMiddleware, validationMiddleware(addOrUpdateSchema), async (req, res, next) => {
+  const newContact = await addContact(req.body, req.userId)
+
+  if (!newContact) {
+    res.status(400).json({ message: 'Contact already exists.' })
+    return
+  }
+
+  res.status(201).json({ name: newContact.name, email: newContact.email, phone: newContact.phone })
 })
 
-router.delete('/:contactId', async (req, res, next) => {
-  const isSuccess = await removeContact(req.params.contactId)
+router.delete('/:contactId', authMiddleware, async (req, res, next) => {
+  const isSuccess = await removeContact(req.params.contactId, req.userId)
 
   if (isSuccess) {
     res.json({ message: 'Contact deleted' })
@@ -43,8 +50,8 @@ router.delete('/:contactId', async (req, res, next) => {
   res.status(404).json(notFoundMessage)
 })
 
-router.patch('/:contactId', validationMiddleware(addOrUpdateSchema), async (req, res, next) => {
-  const updatedContact = await updateContact(req.params.contactId, req.body)
+router.patch('/:contactId', authMiddleware, validationMiddleware(addOrUpdateSchema), async (req, res, next) => {
+  const updatedContact = await updateContact(req.params.contactId, req.body, req.userId)
 
   if (updatedContact) {
     res.json(updatedContact)
@@ -54,8 +61,8 @@ router.patch('/:contactId', validationMiddleware(addOrUpdateSchema), async (req,
   res.status(404).json(notFoundMessage)
 })
 
-router.patch('/:contactId/favorite', validationMiddleware(updateFavoriteSchema), async (req, res, next) => {
-  const updatedContact = await updateContact(req.params.contactId, req.body)
+router.patch('/:contactId/favorite', authMiddleware, validationMiddleware(updateFavoriteSchema), async (req, res, next) => {
+  const updatedContact = await updateContact(req.params.contactId, req.body, req.userId)
 
   if (updatedContact) {
     res.json(updatedContact)
