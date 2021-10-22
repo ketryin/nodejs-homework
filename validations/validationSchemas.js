@@ -22,9 +22,14 @@ const subscriptionSchema = Joi.object({
   subscription: Joi.string().required(),
 })
 
+const verifyEmailSchema = Joi.object({
+  email: Joi.string().email().required()
+})
+
 module.exports = {
   addOrUpdateSchema,
   updateFavoriteSchema,
   userSchema,
-  subscriptionSchema
+  subscriptionSchema,
+  verifyEmailSchema
 }
