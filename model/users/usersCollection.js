@@ -19,6 +19,10 @@ const userShema = Schema({
     type: String,
     default: null,
   },
+  avatarUrl: {
+    type: String,
+    required: true
+  }
 }, { versionKey: false, timestamps: true })
 
 const usersCollection = model('users', userShema)

@@ -1,4 +1,5 @@
 const express = require('express')
+const multer = require('multer')
 const router = express.Router()
 const validationMiddleware = require('../../middlewares/validationMiddleware')
 const authMiddleware = require('../../middlewares/authMiddleware')
@@ -11,6 +12,9 @@ const generateToken = require('../../model/users/generateToken')
 const setTokenToUser = require('../../model/users/setTokenToUser')
 const deleteTokenFromUser = require('../../model/users/deleteTokenFromUser')
 const updateSubscription = require('../../model/users/updateSubscription')
+const updateAvatar = require('../../model/users/updateAvatar')
+
+const upload = multer({ dest: 'tmp/' })
 
 router.get('/current', authMiddleware, async (req, res, next) => {
   const currentUser = await getUserById(req.userId)
@@ -20,7 +24,7 @@ router.get('/current', authMiddleware, async (req, res, next) => {
     return
   }
 
-  res.status(200).json({ email: currentUser.email, subscription: currentUser.subscription })
+  res.status(200).json({ email: currentUser.email, subscription: currentUser.subscription, avatarUrl : currentUser.avatarUrl })
 })
 
 router.post('/signup', validationMiddleware(userSchema), async (req, res, next) => {
@@ -34,7 +38,7 @@ router.post('/signup', validationMiddleware(userSchema), async (req, res, next) 
 
   const createdUser = await createUser(email, password)
 
-  res.status(201).json({ email: createdUser.email, subscription: createdUser.subscription })
+  res.status(201).json({ email: createdUser.email, subscription: createdUser.subscription, avatarUrl : createdUser.avatarUrl })
 })
 
 router.post('/login', validationMiddleware(userSchema), async (req, res, next) => {
@@ -82,6 +86,13 @@ router.patch('/', authMiddleware, validationMiddleware(subscriptionSchema), asyn
   await updateSubscription(req.userId, req.body.subscription)
 
   res.status(200).json({ messsage: 'Subscription updated successfully.' })
+})
+
+router.patch('/avatars', authMiddleware, upload.single('avatar'), async (req, res) => {
+  const avatarFile = req.file
+  const avatarUrl = await updateAvatar(req.userId, avatarFile)
+
+  res.status(200).json({ avatarUrl })
 })
 
 module.exports = router
